@@ -1,0 +1,50 @@
+2025-11-03 18:43:21 | [31mERROR[0m | خطأ
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 18:45:17 | [31mERROR[0m | خطأ
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 19:12:18 | [31mERROR[0m | ⚠️ المكتبات المفقودة: torch, transformers, numpy
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 19:26:13 | [35mCRITICAL[0m | ❌ خطأ غير متوقع: [WinError 1114] Une routine d’initialisation d’une bibliothèque de liens dynamiques (DLL) a échoué. Error loading "c:\Users\wsi\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\lib\c10.dll" or one of its dependencies.
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 19:26:42 | [35mCRITICAL[0m | ❌ خطأ غير متوقع: [WinError 1114] Une routine d’initialisation d’une bibliothèque de liens dynamiques (DLL) a échoué. Error loading "c:\Users\wsi\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\lib\c10.dll" or one of its dependencies.
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 19:34:21 | [35mCRITICAL[0m | ❌ خطأ غير متوقع: [WinError 1114] Une routine d’initialisation d’une bibliothèque de liens dynamiques (DLL) a échoué. Error loading "c:\Users\wsi\AppData\Local\Programs\Python\Python311\Lib\site-packages\torch\lib\c10.dll" or one of its dependencies.
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-03 19:45:22 | [35mCRITICAL[0m | ❌ خطأ غير متوقع: cannot import name 'run_bot' from 'telegram_bot' (C:\Kenza\Lamis 5_0\telegram_bot.py)
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-05 17:49:16 | [31mERROR[0m | ❌ فشل استيراد run_bot: cannot import name 'run_bot' from 'telegram_bot' (C:\Kenza\Lamis 5_0\telegram_bot.py)
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-05 17:49:16 | [31mERROR[0m | ❌ فشل استيراد main: cannot import name 'main' from 'telegram_bot' (C:\Kenza\Lamis 5_0\telegram_bot.py)
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
+2025-11-05 17:49:16 | [31mERROR[0m | 💡 تأكد من وجود run_bot() أو main() في telegram_bot.py
+File: C:\Kenza\Lamis 5_0\structured_logger.py:167
+Function: log
+None
+======================================================================
