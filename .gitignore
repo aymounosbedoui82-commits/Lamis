@@ -1,0 +1,29 @@
+﻿# Environnement
+.env
+
+# Bases de données locales
+*.db
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+logs/
+
+# Modèles / poids
+*.pth
+*.pt
+best_model.pth
+
+# Backups / dossiers temporaires
+backup_*/
+old_files_*/
+copie/
+
+# IDE
+.vscode/
