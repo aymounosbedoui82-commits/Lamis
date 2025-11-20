@@ -553,119 +553,60 @@ class IntelligentAgent:
         return date
     
     def _extract_time(self, text: str) -> Optional[Tuple[int, int]]:
-        """
-        استخراج الوقت من النص - نسخة محسّنة مع دعم الأرقام بالحروف ✨
-    
-        يدعم:
-        - XX:XX (مثل: 16:30)
-        - XXhXX (فرنسي: 16h30)
-        - XXh (فرنسي: 16h)
-        - الأرقام بالحروف: الرابعة، العاشرة، إلخ
-        - على الساعة XX
-        - XX صباحاً/مساءً
-        """
-    
-        # 📚 خريطة الأرقام المكتوبة بالحروف
-        ARABIC_NUMBERS = {
-            'الواحدة': 1, 'واحدة': 1,
-            'الثانية': 2, 'ثانية': 2,
-            'الثالثة': 3, 'ثالثة': 3,
-            'الرابعة': 4, 'رابعة': 4,
-            'الخامسة': 5, 'خامسة': 5,
-            'السادسة': 6, 'سادسة': 6,
-            'السابعة': 7, 'سابعة': 7,
-            'الثامنة': 8, 'ثامنة': 8,
-            'التاسعة': 9, 'تاسعة': 9,
-            'العاشرة': 10, 'عاشرة': 10,
-            'الحادية عشرة': 11, 'حادية عشرة': 11,
-            'الثانية عشرة': 12, 'ثانية عشرة': 12,
-        }
-    
-        text_lower = text.lower()
-    
-        # 1️⃣ نمط XX:XX (أعلى أولوية - دقيق)
-        time_colon = re.search(r'\b([0-2]?\d):([0-5]\d)\b', text)
-        if time_colon:
-            hour = int(time_colon.group(1))
-            minute = int(time_colon.group(2))
+        """استخراج الوقت من النص - محسّن للصيغة الفرنسية ✅"""
+        # ✅ نمط جديد: XXhXX (فرنسي) - الأولوية!
+        french_time = re.search(r'(\d{1,2})h(\d{2})', text.lower())
+        if french_time:
+            hour = int(french_time.group(1))
+            minute = int(french_time.group(2))
             if 0 <= hour <= 23 and 0 <= minute <= 59:
-                logger.debug(f"✅ استخراج وقت (XX:XX): {hour}:{minute:02d}")
                 return (hour, minute)
-    
-        # 2️⃣ نمط XXhXX (فرنسي مع دقائق)
-        french_time_full = re.search(r'(\d{1,2})h(\d{2})', text_lower)
-        if french_time_full:
-            hour = int(french_time_full.group(1))
-            minute = int(french_time_full.group(2))
-            if 0 <= hour <= 23 and 0 <= minute <= 59:
-                logger.debug(f"✅ استخراج وقت (XXhXX): {hour}:{minute:02d}")
-                return (hour, minute)
-    
-        # 3️⃣ نمط XXh (فرنسي بدون دقائق)
-        french_time_hour = re.search(r'(\d{1,2})h(?!\d)', text_lower)
-        if french_time_hour:
-            hour = int(french_time_hour.group(1))
-            if 0 <= hour <= 23:
-                logger.debug(f"✅ استخراج وقت (XXh): {hour}:00")
-                return (hour, 0)
-    
-        # 4️⃣ ✨ الأرقام المكتوبة بالحروف العربية (الأولوية العالية!)
-        for word, number in ARABIC_NUMBERS.items():
-            # البحث عن: "الساعة الرابعة مساء" أو "الرابعة صباحاً"
-            pattern = rf'(?:الساعة\s+)?{re.escape(word)}\s*(صباحا|صباحاً|مساء|مساءً)?'
-            match = re.search(pattern, text_lower)
         
-            if match:
-                hour = number
-                period = match.group(1)
+        # نمط XX:XX
+        time_pattern = re.search(r'(\d{1,2})[:](\d{2})', text)
+        if time_pattern:
+            hour = int(time_pattern.group(1))
+            minute = int(time_pattern.group(2))
+            if 0 <= hour <= 23 and 0 <= minute <= 59:
+                return (hour, minute)
+        
+        # ✅ نمط جديد: XXh (فرنسي بدون دقائق)
+        french_hour_only = re.search(r'(\d{1,2})h(?!\d)', text.lower())
+        if french_hour_only:
+            hour = int(french_hour_only.group(1))
+            if 0 <= hour <= 23:
+                return (hour, 0)
+        
+        # نمط "الساعة X" أو "X صباحاً" أو "X مساءً"
+        # ✅ محسّن: يقبل "على الساعة 16" بدون am/pm
+        hour_pattern = re.search(r'(?:الساعة|على الساعة|ساعة)?\s*(\d{1,2})\s*(صباحا|صباحاً|مساء|مساءً|am|pm)?', text.lower())
+        if hour_pattern:
+            hour = int(hour_pattern.group(1))
+            period = hour_pattern.group(2)
             
-                # معالجة صباحاً/مساءً
-                if period:
-                    if period in ['مساء', 'مساءً'] and hour < 12:
+            # ✅ معالجة محسّنة للوقت
+            if period:
+                if period in ['مساء', 'مساءً', 'pm'] and hour < 12:
+                    hour += 12
+                elif period in ['صباحا', 'صباحاً', 'am'] and hour == 12:
+                    hour = 0
+                elif period == 'pm' and hour == 12:
+                    hour = 12
+            else:
+                # إذا لم يكن هناك period والساعة بين 1-11، نفترض أنه مساءً
+                # (في الغالب المواعيد تكون بعد الظهر)
+                if 1 <= hour <= 11:
+                    # إذا كان الوقت الحالي صباحاً والساعة صغيرة، نفترض مساءً
+                    from datetime import datetime
+                    current_hour = datetime.now().hour
+                    if current_hour >= 12 or hour < 8:
                         hour += 12
-                    elif period in ['صباحا', 'صباحاً'] and hour == 12:
-                        hour = 0
             
-                if 0 <= hour <= 23:
-                    logger.debug(f"✅ استخراج وقت (حروف): {word} → {hour}:00")
-                    return (hour, 0)
-    
-        # 5️⃣ نمط "على الساعة X" (رقمي - يجب أن تسبق كلمة "ساعة")
-        time_with_keyword = re.search(
-            r'(?:على\s+)?(?:الساعة|ساعة)\s+(\d{1,2})(?!\d)',
-            text_lower
-        )
-        if time_with_keyword:
-            hour = int(time_with_keyword.group(1))
             if 0 <= hour <= 23:
-                logger.debug(f"✅ استخراج وقت (على الساعة X): {hour}:00")
                 return (hour, 0)
-    
-        # 6️⃣ نمط "X صباحاً" أو "X مساءً" (رقمي بدون كلمة "الساعة")
-        time_with_period = re.search(
-            r'\b(\d{1,2})\s+(صباحا|صباحاً|مساء|مساءً|am|pm)\b',
-            text_lower
-        )
-        if time_with_period:
-            hour = int(time_with_period.group(1))
-            period = time_with_period.group(2)
         
-            # معالجة صباحاً/مساءً
-            if period in ['مساء', 'مساءً', 'pm'] and 1 <= hour <= 11:
-                hour += 12
-            elif period in ['صباحا', 'صباحاً', 'am'] and hour == 12:
-                hour = 0
-            elif period == 'pm' and hour == 12:
-                hour = 12
-        
-            if 0 <= hour <= 23:
-                logger.debug(f"✅ استخراج وقت (X صباحاً/مساءً): {hour}:00")
-                return (hour, 0)
-    
-        # إذا لم نجد شيئاً
-        logger.debug("⚠️ لم يتم استخراج الوقت")
         return None
-
+    
     def _extract_title_and_description(self, message: str, language: str) -> Tuple[str, str]:
         """استخراج عنوان مختصر ووصف من الرسالة"""
         
@@ -1048,10 +989,6 @@ You're welcome! 😊"""
                 try:
                     # استيراد مدير التذكيرات المخصصة
                     from advanced_features import CustomReminderManager
-            
-                    # ✅ فتح اتصال قاعدة البيانات
-                    conn = sqlite3.connect(self.db.db_path)
-                    cursor = conn.cursor()
             
                     # الحصول على آخر موعد للمستخدم
                     cursor.execute('''

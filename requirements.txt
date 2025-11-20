@@ -1,15 +1,11 @@
-# requirements.txt - Enhanced Version ✅
-# متطلبات مشروع Lamis Bot - المساعد الذكي
+# requirements.txt - Enhanced Version v2.0
 
-# ==============================================
-# Core Dependencies
-# ==============================================
-
-# Python Telegram Bot
+# Core
 python-telegram-bot==20.7
+python-dotenv==1.0.0
 
 # Database
-sqlite3  # مدمج مع Python
+aiosqlite==0.19.0  # NEW: Async database
 
 # Machine Learning & NLP
 torch==2.1.0
@@ -17,64 +13,18 @@ transformers==4.35.0
 numpy==1.24.3
 scikit-learn==1.3.2
 
-# ==============================================
-# Security & Configuration (المرحلة 1) 🔒
-# ==============================================
+# Visualization - NEW
+matplotlib==3.8.2
+seaborn==0.13.0
 
-# حماية Token
-python-dotenv==1.0.0
-
-# ==============================================
 # Utilities
-# ==============================================
-
-# Date & Time parsing
 python-dateutil==2.8.2
 
-# Rate Limiting (optional - نحن نستخدم custom implementation)
-# ratelimit==2.2.1
-
-# ==============================================
-# Development & Testing
-# ==============================================
-
-# Testing
+# Development
 pytest==7.4.3
 pytest-asyncio==0.21.1
-
-# Code Quality
 pylint==3.0.3
 black==23.12.1
-mypy==1.7.1
 
-# ==============================================
-# Monitoring & Logging (المرحلة 1) 📊
-# ==============================================
-
-# Structured Logging
-# (نحن نستخدم custom implementation)
-
-# Metrics (المرحلة 3)
-# prometheus-client==0.19.0
-
-# ==============================================
-# Optional - للمرحلة 3 المتقدمة
-# ==============================================
-
-# Google Calendar Integration
-# google-auth==2.25.2
-# google-auth-oauthlib==1.1.0
-# google-api-python-client==2.110.0
-
-# Docker Support
-# docker==7.0.0
-
-# ==============================================
-# Production
-# ==============================================
-
-# WSGI Server (if needed)
-# gunicorn==21.2.0
-
-# Process Management
-# supervisor==4.2.5
+# Performance - NEW
+cachetools==5.3.2

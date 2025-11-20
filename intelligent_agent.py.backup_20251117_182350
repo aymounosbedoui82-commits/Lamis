@@ -1049,10 +1049,6 @@ You're welcome! 😊"""
                     # استيراد مدير التذكيرات المخصصة
                     from advanced_features import CustomReminderManager
             
-                    # ✅ فتح اتصال قاعدة البيانات
-                    conn = sqlite3.connect(self.db.db_path)
-                    cursor = conn.cursor()
-            
                     # الحصول على آخر موعد للمستخدم
                     cursor.execute('''
                         SELECT id FROM appointments 
