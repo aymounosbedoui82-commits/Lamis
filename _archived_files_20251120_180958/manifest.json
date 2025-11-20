@@ -1,0 +1,78 @@
+{
+  "timestamp": "2025-11-20T18:09:58.639740",
+  "stats": {
+    "moved": 12,
+    "failed": 0,
+    "total_size_bytes": 269061,
+    "total_size_mb": 0.25659656524658203
+  },
+  "categories": {
+    "essential_count": 28,
+    "unwanted_count": 12,
+    "unknown_count": 2,
+    "logs_count": 0,
+    "databases_count": 0
+  },
+  "files": [
+    {
+      "name": "cleanup_project.py",
+      "size": 17341,
+      "modified": "2025-11-20T18:09:47.371197"
+    },
+    {
+      "name": "fix_cursor_error.py",
+      "size": 7516,
+      "modified": "2025-11-17T18:23:47.979216"
+    },
+    {
+      "name": "fix_time_extraction.py",
+      "size": 12448,
+      "modified": "2025-11-11T17:41:15.174312"
+    },
+    {
+      "name": "fix_time_extraction_v2.py",
+      "size": 10851,
+      "modified": "2025-11-17T17:37:27.991011"
+    },
+    {
+      "name": "intelligent_agent.py.backup_20251111_174119",
+      "size": 46364,
+      "modified": "2025-11-11T17:14:06.038435"
+    },
+    {
+      "name": "intelligent_agent.py.backup_20251117_172852",
+      "size": 46364,
+      "modified": "2025-11-11T17:44:34.033313"
+    },
+    {
+      "name": "intelligent_agent.py.backup_20251117_173730",
+      "size": 46364,
+      "modified": "2025-11-17T17:28:52.035491"
+    },
+    {
+      "name": "intelligent_agent.py.backup_20251117_182350",
+      "size": 48900,
+      "modified": "2025-11-17T18:01:57.901522"
+    },
+    {
+      "name": "organize_project.py",
+      "size": 13373,
+      "modified": "2025-11-11T17:30:34.338664"
+    },
+    {
+      "name": "quick_diagnosis.py",
+      "size": 6634,
+      "modified": "2025-11-17T18:14:31.741518"
+    },
+    {
+      "name": "test_time_extraction_fixed.py",
+      "size": 7945,
+      "modified": "2025-11-17T18:14:31.745874"
+    },
+    {
+      "name": "test_time_fix.py",
+      "size": 4961,
+      "modified": "2025-11-17T18:01:57.901522"
+    }
+  ]
+}

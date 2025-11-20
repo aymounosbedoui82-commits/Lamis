@@ -71,6 +71,9 @@ class TelegramBot:
         self.app.add_handler(CommandHandler("export", self.export_command))
         self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
         self.app.add_handler(CallbackQueryHandler(self.button_callback))
+        self.app.add_handler(CommandHandler("search", self.search_command))
+        self.app.add_handler(CommandHandler("export_calendar", self.export_calendar_command))
+        self.app.add_handler(CommandHandler("charts", self.charts_command))
         register_custom_reminder_handler(self.app)
         # ✅ إضافة معالج الأخطاء
         self.app.add_error_handler(error_handler)
