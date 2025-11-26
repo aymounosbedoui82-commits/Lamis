@@ -1,30 +1,18 @@
-# requirements.txt - Enhanced Version v2.0
+# Lamis Bot - Smart AI Engine Requirements
+# ==========================================
 
-# Core
-python-telegram-bot==20.7
-python-dotenv==1.0.0
+# Core ML
+torch>=1.9.0
+numpy>=1.19.0
+
+# Optional: BERT support (uncomment if needed)
+# transformers>=4.20.0
+# sentencepiece>=0.1.96
 
 # Database
-aiosqlite==0.19.0  # NEW: Async database
-
-# Machine Learning & NLP
-torch==2.1.0
-transformers==4.35.0
-numpy==1.24.3
-scikit-learn==1.3.2
-
-# Visualization - NEW
-matplotlib==3.8.2
-seaborn==0.13.0
+# sqlite3 is built-in
 
 # Utilities
-python-dateutil==2.8.2
-
-# Development
-pytest==7.4.3
-pytest-asyncio==0.21.1
-pylint==3.0.3
-black==23.12.1
-
-# Performance - NEW
-cachetools==5.3.2
+# asyncio is built-in
+# logging is built-in
+# dataclasses is built-in (Python 3.7+)

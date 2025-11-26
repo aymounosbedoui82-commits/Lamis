@@ -58,6 +58,132 @@ class TelegramBot:
         
         self._setup_handlers()
     
+    async def search_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """البحث في المواعيد"""
+        try:
+            from smart_search import SmartSearch
+        
+            user_id = update.effective_user.id
+            query = ' '.join(context.args) if context.args else None
+        
+            if not query:
+                await update.message.reply_text(
+                    "🔍 استخدام البحث:\n"
+                    "/search [كلمة البحث]\n\n"
+                    "مثال:\n"
+                    "/search طبيب\n"
+                    "/search اجتماع"
+                )
+                return
+        
+            searcher = SmartSearch()
+            results = searcher.search_appointments(user_id, query=query)
+        
+            if not results:
+                await update.message.reply_text(
+                    f"❌ لم يتم العثور على مواعيد تطابق: {query}"
+                )
+                return
+        
+            message = f"🔍 **نتائج البحث عن:** {query}\n\n"
+        
+            for apt in results[:10]:
+                relevance_emoji = "🎯" if apt['relevance'] > 0.8 else "📌"
+                date_obj = datetime.strptime(apt['date_time'], '%Y-%m-%d %H:%M:%S')
+            
+                message += f"{relevance_emoji} **{apt['title']}**\n"
+                message += f"📅 {date_obj.strftime('%d/%m/%Y %H:%M')}\n"
+                message += f"🎯 صلة: {apt['relevance']*100:.0f}%\n\n"
+        
+            await update.message.reply_text(message, parse_mode='Markdown')
+    
+        except ImportError:
+            await update.message.reply_text(
+                "⚠️ ميزة البحث غير متاحة\n"
+                "⚠️ Search feature not available"
+            )
+        except Exception as e:
+            logger.error(f"خطأ في البحث: {e}")
+            await update.message.reply_text("❌ حدث خطأ في البحث")
+
+    async def export_calendar_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """تصدير التقويم"""
+        try:
+            from calendar_export import CalendarExporter
+            from pathlib import Path
+        
+            user_id = update.effective_user.id
+            exporter = CalendarExporter()
+        
+            # تصدير iCal
+            ical_file = exporter.export_to_ical(user_id)
+        
+            # إرسال الملف
+            with open(ical_file, 'rb') as f:
+                await update.message.reply_document(
+                    document=f,
+                    filename=f"my_calendar_{datetime.now().strftime('%Y%m%d')}.ics",
+                    caption="📅 **تقويمك بصيغة iCal**\n\n"
+                        "يمكنك استيراده في:\n"
+                        "• Google Calendar\n"
+                        "• Apple Calendar\n"
+                        "• Outlook\n"
+                        "• أي تطبيق تقويم آخر"
+                )
+        
+            # حذف الملف المؤقت
+            Path(ical_file).unlink()
+    
+        except ImportError:
+            await update.message.reply_text(
+                "⚠️ ميزة التصدير غير متاحة\n"
+                "⚠️ Export feature not available"
+            )
+        except Exception as e:
+            logger.error(f"خطأ في تصدير التقويم: {e}")
+            await update.message.reply_text("❌ حدث خطأ في التصدير")
+
+    async def charts_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """عرض الإحصائيات المرئية"""
+        try:
+            from visual_analytics import VisualAnalytics
+        
+            user_id = update.effective_user.id
+            analytics = VisualAnalytics()
+        
+            await update.message.reply_text("📊 جاري إنشاء الرسوم البيانية...")
+        
+            # رسم النشاط الأسبوعي
+            weekly_chart = analytics.plot_weekly_activity(user_id)
+            await update.message.reply_photo(
+                photo=weekly_chart,
+                caption="📅 **نشاطك الأسبوعي**"
+            )
+        
+            # رسم الأولويات
+            priority_chart = analytics.plot_priority_distribution(user_id)
+            await update.message.reply_photo(
+                photo=priority_chart,
+                caption="🎯 **توزيع الأولويات**"
+            )
+        
+            # رسم الاتجاه الشهري
+            trend_chart = analytics.plot_monthly_trend(user_id)
+            await update.message.reply_photo(
+                photo=trend_chart,
+                caption="📈 **الاتجاه الشهري**"
+            )
+    
+        except ImportError:
+            await update.message.reply_text(
+                "⚠️ ميزة الرسوم البيانية غير متاحة\n"
+                "⚠️ Charts feature not available\n\n"
+                "💡 تحتاج تثبيت matplotlib:\n"
+                "pip install matplotlib"
+        )
+        except Exception as e:
+            logger.error(f"خطأ في الرسوم البيانية: {e}")
+            await update.message.reply_text("❌ حدث خطأ في إنشاء الرسوم")
     def _setup_handlers(self):
         """إعداد معالجات الأوامر والرسائل"""
         self.app.add_handler(CommandHandler("start", self.start_command))
